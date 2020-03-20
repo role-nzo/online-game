@@ -100,7 +100,7 @@ $(document).ready(function() {
 
     connection.onstream = function(event) {
         if(event.type === 'local') {
-		event.stream.mute()
+		event.stream.getAudioTracks()[0].enabled = false
 	}
             var videoStream = getNewVideoStream(event.userid);
             //videoStream.setAttribute('userid', event.userid);
