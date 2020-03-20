@@ -99,13 +99,15 @@ $(document).ready(function() {
     };
 
     connection.onstream = function(event) {
-        //if(event.type === 'remote') {
+        if(event.type === 'local') {
+		event.mute()
+	}
             var videoStream = getNewVideoStream(event.userid);
             //videoStream.setAttribute('userid', event.userid);
         console.log(videoStream)
             videoStream.srcObject = ( event.stream );
             
-        //}
+        }
     }
     
     connection.onleave = function(event) {
