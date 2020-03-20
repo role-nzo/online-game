@@ -1,0 +1,233 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Display Webcam Stream</title>
+ 
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>
+	<script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anoymous"></script>
+ 
+	<style>
+	
+	.row {
+		height: 50%;
+		width: 100%;
+	}
+	
+	.row .video-player {
+		background-color: black;
+		overflow: hidden;object-fit: cover;
+		height: 100%;
+		width: 100%;
+		
+	}
+	
+	.col-sm-6 {
+		height: 100%;
+		width: 50%;
+	}
+	
+	body {
+		padding: 0;
+		margin: 0;
+	}
+	
+	#video-container {
+		height: 50%;
+	}
+	
+	#video-container .row {
+		max-height: 100% !important;
+		height: auto;
+	}
+	
+	.h-33 {
+		height: calc(100% / 3) !important;
+	}
+	
+	.h-33:last-child {
+		height: calc(100% / 3 + 0.1px) !important;
+	}
+	
+	</style>
+	
+	
+	<script>
+$(document).ready(function() {
+	var n_videos = 0;
+    var i = 0;
+	
+    //var id = prompt("Inserisci il tuo username", "");
+    //var room = prompt("Inserisci il nome della stanza", "");
+    
+	//STARTS RTCMultiConnection
+	
+	var connection = new RTCMultiConnection();
+
+    connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+    
+    //connection.userid = id || undefined;
+
+    connection.session = {
+        //media
+        video: true,
+        audio: true,
+
+        //text
+        data: true
+    };
+    
+    var videoConstraints = {
+        mandatory: {
+            //maxWidth: 100,
+            maxHeight: 720,
+            //WminAspectRatio: 1.77,
+            minFrameRate: 3,
+            maxFrameRate: 64,
+        },
+        optional: []
+    };
+    
+
+    connection.mediaConstraints.video = videoConstraints;
+    connection.mediaConstraints.audio = true;
+
+    connection.onopen = function(event) {
+        connection.send('hello everyone');
+    };
+
+    connection.onstream = function(event) {
+        //if(event.type === 'remote') {
+            var videoStream = getNewVideoStream(event.userid);
+            //videoStream.setAttribute('userid', event.userid);
+        console.log(videoStream)
+            videoStream.srcObject = ( event.stream );
+            
+        //}
+    }
+    
+    connection.onleave = function(event) {
+        //alert(event.userid)
+    }
+    
+    connection.onclose = function(event) {
+        removeVideoStream(event.userid)
+    }
+
+    connection.onmessage = function(event) {
+        console.log(event.userid + ' said: ' + event.data);
+    };
+
+    connection.openOrJoin(/*room || */"default_room_for_testing__rolenzo");
+	
+    //ENDS RTCMultiConnection
+    
+	$("#button").on('click', function() {
+        var video = getNewVideoStream(i++);
+        //video.setAttribute('userid', );
+		console.log(video);
+	});
+    $("#button2").on('click', function() {
+        //var userid = prompt("user_id");
+		//removeVideoStream(userid);
+        $(".video-row").eq(1).find(".video-col").appendTo($(".video-row").eq(0));
+	});
+	
+	
+	
+	function getNewVideoStream(userid) {
+		n_videos++;
+		
+		var n_rows = getVideosRows(n_videos);
+		var disposition = getVideosDisposition(n_videos, n_rows);
+        
+        //ADDS NEW VIDEO
+        getNewVideo(userid).appendTo($(".video-row").eq(0));
+        
+		applyVideosDisposition(disposition);
+		
+		return document.querySelector(".video-col[userid='" + userid + "']").querySelector(".video-player");
+	}
+    
+    function removeVideoStream(userid) {
+        n_videos--;
+        
+        $(".video-col[userid=" + userid + "]").remove();
+        
+        var n_rows = getVideosRows(n_videos);
+		var disposition = getVideosDisposition(n_videos, n_rows);
+        
+        applyVideosDisposition(disposition);
+    }
+    
+    function getNewVideo(userid) {
+        return $("<div></div>")
+            .addClass("video-col m-0 p-0")
+            .attr("userid", userid)
+            .html(
+                $("<video></video>")
+                    .addClass("video-player")
+                    .attr("autoplay", "true")
+            );
+    }
+	
+	function applyVideosDisposition(disposition) {
+		var n_rows = disposition.length;
+        var offset = 0;
+		
+		//Removes all col-sm-X classes to add the new right one
+		//	Adds col-sm-X where X=12/n_videos_in_row
+		for(var j = 0; j < n_rows; j++) {
+			for(var k = 0; k < disposition[j]; k++) {
+                $(".video-col").eq(offset++).removeClass('col-sm-12 col-sm-6 col-sm-4 col-sm-3 col-sm-2 col-sm-1').addClass("col-sm-" + (12 / /*((disposition[j] < 2) ? 2 : */disposition[j]));
+            }
+		}
+        
+        $(".video-row")
+            .removeClass("h-" + Math.floor(100 / (n_rows - 1)))
+            .addClass("h-" + Math.floor(100 / n_rows));
+	}
+	
+	function getVideosRows(n_videos) {
+		var remainder = (n_videos) % 3;
+		var salt = (remainder > 0) ? 1 : 0;
+		return (n_videos - remainder) / 3 + salt;
+	}
+	
+	function getVideosDisposition(n_videos, n_rows) {
+		var sum = 0;
+		var videos = [];
+		var min_index;
+		
+		//Initialize rows to 0
+		for(var j=0; j < n_rows; j++)
+			videos[j] = 0;
+		
+		//Increments the row with less videos until the sum of the videos == n_videos
+		while(sum < n_videos) {
+			min_index = videos.indexOf(Math.min(...videos));
+			videos[min_index]++;
+			sum++;
+		}
+		
+		return videos;
+	}
+});
+
+	</script>
+</head>
+<body>
+	<div id="video-container">
+		<div class="video-row row m-0 h-100">
+		</div>
+	</div>
+    <div class="row">
+        <div id="test" class="col-xs-12">asd</div>
+		<button id="button" style="position: absolute; z-index: 4; left: 0; top: 0;">btn</button>
+        <button id="button2" style="position: absolute; z-index: 4; left: 100px; top: 0;">btn</button>
+    </div>
+
+</body>
+</html>
