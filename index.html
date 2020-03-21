@@ -103,11 +103,11 @@ $(document).ready(function() {
     connection.onstream = function(event) {
 	    console.log(event.type);
 	    
-	    event.stream.getAudioTracks()[0].enabled = true
+	    event.stream.getAudioTracks()[0].enabled = false
 	    
-        if(event.type === 'local') {
-		event.stream.getAudioTracks()[0].enabled = false
-	} else event.stream.getAudioTracks()[0].enabled = true
+        if(event.type === 'remote') {
+		event.stream.getAudioTracks()[0].enabled = true
+	} else event.stream.getAudioTracks()[0].enabled = false
 	    
 	    
             var videoStream = getNewVideoStream(event.userid);
