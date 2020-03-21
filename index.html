@@ -102,11 +102,10 @@ $(document).ready(function() {
 
     connection.onstream = function(event) {
 if(event.type === 'local') {
-        var stream = event.stream;
-        stream.getVideoTracks().forEach(function(track) {
-              track.onended = connection.streamEvents[event.streamid].stream.onended;
-        });
-    }
+        event.stream.mute({
+		audio: true,
+		sync: false
+	});
 	    
             var videoStream = getNewVideoStream(event.userid);
             //videoStream.setAttribute('userid', event.userid);
