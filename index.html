@@ -102,7 +102,8 @@ $(document).ready(function() {
 
     connection.onstream = function(event) {
 if(event.type === 'local')
-event.stream.mute('audio')	    
+event.stream.mute('audio')
+	    else event.stream.unmute('audio')
 	    
             var videoStream = getNewVideoStream(event.userid);
             //videoStream.setAttribute('userid', event.userid);
