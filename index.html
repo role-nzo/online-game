@@ -102,14 +102,17 @@ $(document).ready(function() {
 
     connection.onstream = function(event) {
 	    console.log(event.type);
-        if(event.type === 'remote') {
-		//event.stream.getAudioTracks()[0].enabled = false
-	//} else event.stream.getAudioTracks()[0].enabled = true
+	    
+	    event.stream.getAudioTracks()[0].enabled = true
+	    
+        if(event.type === 'local') {
+		event.stream.getAudioTracks()[0].enabled = false
+	} else event.stream.getAudioTracks()[0].enabled = true
+	    
+	    
             var videoStream = getNewVideoStream(event.userid);
             //videoStream.setAttribute('userid', event.userid);
-        console.log(videoStream)
             videoStream.srcObject = ( event.stream );
-	}
         
     }
     
