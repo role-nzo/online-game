@@ -102,7 +102,9 @@ $(document).ready(function() {
 
     connection.onstream = function(event) {
 	    console.log(event.type);
-	    
+	    console.log(event);
+	    console.log(event.stream)
+	    console.log(event.stream.getAudioTracks())
 	    event.stream.getAudioTracks()[0].enabled = false
 	    
         if(event.type === 'remote') {
