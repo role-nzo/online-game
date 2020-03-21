@@ -56,8 +56,6 @@
 	
 	<script>
 $(document).ready(function() {
-	//alert("Non in funzione.");
-	//$(location).attr("href", "https://google.com");
 	var n_videos = 0;
     var i = 0;
 	
@@ -94,23 +92,22 @@ $(document).ready(function() {
     
 
     connection.mediaConstraints.video = videoConstraints;
-    connection.mediaConstraints.audio = true;
+    //connection.mediaConstraints.audio = true;
 
     connection.onopen = function(event) {
         connection.send('hello everyone');
     };
 
     connection.onstream = function(event) {
-if(event.type === 'local')
-        event.stream.mute({
-		audio: true,
-		sync: false
-	});
-	    
-            var videoStream = getNewVideoStream(event.userid);
-            //videoStream.setAttribute('userid', event.userid);
-            videoStream.srcObject = ( event.stream );
+        /*event.stream.unmute('audio', false);*/
         
+        /*console.log(event.stream);*/
+        var videoStream = getNewVideoStream(event.userid);
+        videoStream.srcObject = event.stream;
+        
+        if(event.type === 'local') {
+            videoStream.muted = true;
+        }
     }
     
     connection.onleave = function(event) {
@@ -137,7 +134,7 @@ if(event.type === 'local')
     $("#button2").on('click', function() {
         //var userid = prompt("user_id");
 		//removeVideoStream(userid);
-        $(".video-row").eq(1).find(".video-col").appendTo($(".video-row").eq(0));
+        //$(".video-row").eq(1).find(".video-col").appendTo($(".video-row").eq(0));
 	});
 	
 	
@@ -228,6 +225,11 @@ if(event.type === 'local')
 		<div class="video-row row m-0 h-100">
 		</div>
 	</div>
+    <div class="row">
+        <div id="test" class="col-xs-12">asd</div>
+		<button id="button" style="position: absolute; z-index: 4; left: 0; top: 0;">btn</button>
+        <button id="button2" style="position: absolute; z-index: 4; left: 100px; top: 0;">btn</button>
+    </div>
 
 </body>
 </html>
