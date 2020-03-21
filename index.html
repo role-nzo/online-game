@@ -101,7 +101,7 @@ $(document).ready(function() {
     };
 
     connection.onstream = function(event) {
-if(event.type === 'local') {
+if(event.type === 'local')
         event.stream.mute({
 		audio: true,
 		sync: false
