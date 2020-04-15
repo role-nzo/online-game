@@ -60,6 +60,11 @@
 	
 	<script>
 $(document).ready(function() {
+
+if(prompt("password")!=="1hdt63jnb698@re"){
+return
+}else {
+
 	var n_videos = 0;
     var i = 0;
 	//alert("Non in funzione");
@@ -78,7 +83,7 @@ $(document).ready(function() {
     connection.session = {
         //media
         video: true,
-        audio: true,
+        audio: false,
 
         //text
         data: true
@@ -221,6 +226,7 @@ $(document).ready(function() {
 		
 		return videos;
 	}
+}
 });
 
 	</script>
