@@ -110,12 +110,12 @@ return
 
     connection.onstream = function(event) {
         /*event.stream.unmute('audio', false);*/
-        
+        if(event.type === 'remote') {
         /*console.log(event.stream);*/
         var videoStream = getNewVideoStream(event.userid);
         videoStream.srcObject = event.stream;
         
-        if(event.type === 'local') {
+        
             videoStream.muted = true;
         }
     }
