@@ -73,8 +73,8 @@ $(document).ready(function() {
 	//STARTS RTCMultiConnection
 	
 	var connection = new RTCMultiConnection();
-
-    connection.socketURL = 'https://muaz-khan-rtcmulticonnection.glitch.me:443/';
+var password = prompt("Password")
+    connection.socketURL = 'https://muaz-khan-rtcmulticonnection.glitch.me:443/?infodata='+password;
     
     //connection.userid = id || undefined;
 
