@@ -74,10 +74,10 @@ $(document).ready(function() {
 	
 	var connection = new RTCMultiConnection();
 var password = prompt("Password")
-    connection.socketURL = 'https://muaz-khan-rtcmulticonnection.glitch.me:443/?infodata='+password+'/';
+    connection.socketURL = 'https://muaz-khan-rtcmulticonnection.glitch.me:443/';
     
     //connection.userid = id || undefined;
-
+connection.socketCustomParameters = '&infodata='+password';
     connection.session = {
         //media
         video: true,
