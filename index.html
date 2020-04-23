@@ -1,9 +1,36 @@
-<!-- Copy and Paste Me -->
-<div class="glitch-embed-wrap" style="height: 420px; width: 100%;">
-  <iframe
-    src="https://glitch.com/embed/#!/embed/online-game-logic?path=rooms/videochat-js.ejs&previewSize=100"
-    title="online-game-logic on Glitch"
-    allow="geolocation; microphone; camera; midi; vr; encrypted-media"
-    style="height: 100%; width: 100%; border: 0;">
-  </iframe>
-</div>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(function() {
+                $("#add").on('click', function() {
+                    var string='{"title": "' + $("#title").val() + '", "subs": ["' + $("#sub-1").val() + '", "' + $("#sub-2").val() + '", "' + $("#sub-3").val() + '", "' + $("#sub-4").val() + '", "' + $("#sub-5").val() + '"]},'
+                    
+                    $("#title").val('')
+                    $("#sub-1").val('')
+                    $("#sub-2").val('')
+                    $("#sub-3").val('')
+                    $("#sub-4").val('')
+                    $("#sub-5").val('')
+                    
+                    $($(".json").get(0)).clone().html(string).appendTo("#body")
+                })
+            })
+        </script>
+    </head>
+    <body id="body">
+        <div class="container">
+            <input type="text" id="title" placeholder="Titolo parola">
+            <input type="text" id="sub-1" placeholder="Sub 1">
+            <input type="text" id="sub-2" placeholder="Sub 2">
+            <input type="text" id="sub-3" placeholder="Sub 3">
+            <input type="text" id="sub-4" placeholder="Sub 4">
+            <input type="text" id="sub-5" placeholder="Sub 5">
+            <button class="btn btn-primary" id="add">Aggiungi</button>
+        </div>
+        <pre class="json"></pre>
+    </body>
+</html>
