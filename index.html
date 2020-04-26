@@ -215,12 +215,12 @@ connection.socketCustomParameters = '&infodata='+password;
 		for(var j=0; j < n_rows; j++)
 			videos[j] = 0;
 		
-		//Increments the row with less videos until the sum of the videos == n_videos
+		//Increments  the row with less videos until the sum of the videos == n_videos
 		while(sum < n_videos) {
 			min_index = videos.indexOf(Math.min(...videos));
 			videos[min_index]++;
 			sum++;
-		}
+		} 
 		
 		return videos;
 	}
